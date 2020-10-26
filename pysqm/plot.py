@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 '''
 PySQM plotting program
 ____________________________
@@ -331,7 +333,7 @@ class SQMData(object):
             if window_len < 3: return x
             if not window in ['flat','hanning','hamming','bartlett','blackman']:
                 raise ValueError("Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'")
-            s=np.r_[x[window_len-1:0:-1],x,x[-2:-window_len-1:-1]]
+            s = np.r_[x[window_len-1:0:-1],x,x[-2:-window_len-1:-1]]
             if window == 'flat': #moving average
                 w=np.ones(window_len,'d')
             else:

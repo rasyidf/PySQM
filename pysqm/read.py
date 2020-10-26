@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 PySQM reading program
 ____________________________
@@ -72,7 +73,7 @@ if config._device_type == 'SQM-LE':
 elif config._device_type == 'SQM-LU':
     import serial
 if config._use_mysql == True:
-    import _mysql
+    import mysql
 
 
 def filtered_mean(array,sigma=3):
