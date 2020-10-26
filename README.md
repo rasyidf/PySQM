@@ -1,5 +1,6 @@
-PySQM
-=====
+## PySQM 
+
+> This implementation of PySQM will updated to Python3
 
 PySQM is a multi-platform, open-source software designed to read and
 plot data from Unihedron SQM-LE and SQM-LU photometers, giving as 
@@ -19,8 +20,7 @@ the invaluable help of:
  - Pablo de Vicente (OAN)
 
 
-SETUP
-=====
+## SETUP 
 
 After downloading the software, you need to modify the file config.py. 
 In this file you will find several variables that need to be configured
@@ -35,8 +35,7 @@ to match your hardware settings. For example:
 Remember that python (2.7) syntax is mandatory in this file
 
 
-HOW TO USE THE SOFTWARE
-=======================
+## HOW TO USE THE SOFTWARE 
 
 After configuring the software, make sure you are in the parent directory were
 the README, LICENSE and MANIFEST files are located
@@ -64,8 +63,7 @@ The program is currently being redesigned as a normal python package, but at
 present no setup is required.
 
 
-HOW IT WORKS
-============
+## HOW IT WORKS
 
 In a first step, the program tries to connect to the SQM photometer and takes
 some 'tests' measures (metadata/information, calibration and data) to check 
@@ -78,8 +76,7 @@ Each N measurements, the main program calls a plotting function to generate
 a graphical representation of the current nightly data.
 
 
-PySQM known issues
-==================
+## PySQM known issues 
 
 Non-ASCII characters are not supported in the config.py file. Please, avoid using 'ñ', accented vowels, etc.
 In headless systems, such as the Raspberry PI, if you run the program without X, you may suffer from the following fatal error when the program tries to generate the plot:
@@ -89,9 +86,9 @@ Available platform plugins are: eglfs, kms, linuxfb, minimal, minimalegl, offscr
 Reinstalling the application may fix this problem.  Aborted (core dumped)
 
 In order to avoid this problem, you need to create (or modify if the file exists) in your HOME directory the following file: 
-
+```
 .config/matplotlib/matplotlibrc
-
+```
 You just need to set the matplotlib backend to Agg:
 backend : Agg
 
@@ -100,8 +97,7 @@ Save the changes and exit. Now, PySQM should make the plots without issues. You 
 Path to EXE files (windows only):
 https://www.dropbox.com/s/xlbr6ktk8spjsse/PySQM.exe?dl=0
 
-CHANGELOG
-=========
+## CHANGELOG 
 
 v0.3:
     Added datacenter option (optional, disabled by default)
