@@ -1,6 +1,3 @@
-
-#!/usr/bin/env python
-
 '''
 PySQM reading program
 ____________________________
@@ -298,9 +295,9 @@ class device(observatory):
              values[0]+"','"+values[1]+"',"+\
              values[2]+","+values[3]+","+\
              values[4]+","+values[5]+")")
-        except Exception, ex:
-            print(str(inspect.stack()[0][2:4][::-1])+\
-             ' DB Error. Exception: %s' % str(ex))
+        except Exception as ex:
+            print((str(inspect.stack()[0][2:4][::-1])+\
+             ' DB Error. Exception: %s' % str(ex)))
 
         if mydb != None:
             mydb.close()
@@ -321,7 +318,7 @@ class device(observatory):
         if len(self.DataCache.split("\n"))>=number_measures+1:
             self.save_data(self.DataCache)
             self.DataCache = ""
-            print(str(niter)+'\t'+formatted_data[:-1])
+            print((str(niter)+'\t'+formatted_data[:-1]))
 
     def flush_cache(self):
         ''' Flush the data cache '''
@@ -461,21 +458,21 @@ class SQMLE(SQM):
         '''
 
         try:
-            print('Trying fixed device address %s ... ' %str(config._device_addr))
+            print(('Trying fixed device address %s ... ' %str(config._device_addr)))
             self.addr = config._device_addr
             self.port = 10001
             self.start_connection()
         except:
             print('Trying auto device address ...')
             self.addr = self.search()
-            print('Found address %s ... ' %str(self.addr))
+            print(('Found address %s ... ' %str(self.addr)))
             self.port = 10001
             self.start_connection()
 
         # Clearing buffer
-        print('Clearing buffer ... |'),
+        print(('Clearing buffer ... |'), end=' ')
         buffer_data = self.read_buffer()
-        print(buffer_data),
+        print((buffer_data), end=' ')
         print('| ... DONE')
         print('Reading test data (ix,cx,rx)...')
         time.sleep(1)
@@ -497,14 +494,14 @@ class SQMLE(SQM):
         buf=''
         starttime = time.time()
 
-        print "Looking for replies; press Ctrl-C to stop."
+        print("Looking for replies; press Ctrl-C to stop.")
         addr=[None,None]
         while True:
             try:
                 (buf, addr) = self.s.recvfrom(30)
                 if buf[3].encode("hex")=="f7":
-                    print "Received from %s: MAC: %s" % \
-                     (addr, buf[24:30].encode("hex"))
+                    print("Received from %s: MAC: %s" % \
+                     (addr, buf[24:30].encode("hex")))
             except:
                 #Timeout in seconds. Allow all devices time to respond
                 if time.time()-starttime > 3:
@@ -581,11 +578,11 @@ class SQMLE(SQM):
 
         # Check that msg contains data
         if read_err==True:
-            print('ERR. Reading the photometer!: %s' %str(msg))
+            print(('ERR. Reading the photometer!: %s' %str(msg)))
             if (DEBUG): raise
             return(-1)
         else:
-            print('Sensor info: '+str(msg)),
+            print(('Sensor info: '+str(msg)), end=' ')
             return(msg)
 
     def read_calibration(self,tries=1):
@@ -614,11 +611,11 @@ class SQMLE(SQM):
 
         # Check that msg contains data
         if read_err==True:
-            print('ERR. Reading the photometer!: %s' %str(msg))
+            print(('ERR. Reading the photometer!: %s' %str(msg)))
             if (DEBUG): raise
             return(-1)
         else:
-            print('Calibration info: '+str(msg)),
+            print(('Calibration info: '+str(msg)), end=' ')
             return(msg)
 
     def read_data(self,tries=1):
@@ -648,11 +645,11 @@ class SQMLE(SQM):
 
         # Check that msg contains data
         if read_err==True:
-            print('ERR. Reading the photometer!: %s' %str(msg))
+            print(('ERR. Reading the photometer!: %s' %str(msg)))
             if (DEBUG): raise
             return(-1)
         else:
-            if (DEBUG): print('Data msg: '+str(msg))
+            if (DEBUG): print(('Data msg: '+str(msg)))
             return(msg)
 
 
@@ -664,21 +661,21 @@ class SQMLU(SQM):
         '''
 
         try:
-            print('Trying fixed device address %s ... ' %str(config._device_addr))
+            print(('Trying fixed device address %s ... ' %str(config._device_addr)))
             self.addr = config._device_addr
             self.bauds = 115200
             self.start_connection()
         except:
             print('Trying auto device address ...')
             self.addr = self.search()
-            print('Found address %s ... ' %str(self.addr))
+            print(('Found address %s ... ' %str(self.addr)))
             self.bauds = 115200
             self.start_connection()
 
         # Clearing buffer
-        print('Clearing buffer ... |'),
+        print(('Clearing buffer ... |'), end=' ')
         buffer_data = self.read_buffer()
-        print(buffer_data),
+        print((buffer_data), end=' ')
         print('| ... DONE')
         print('Reading test data (ix,cx,rx)...')
         time.sleep(1)
@@ -778,11 +775,11 @@ class SQMLU(SQM):
 
         # Check that msg contains data
         if read_err==True:
-            print('ERR. Reading the photometer!: %s' %str(msg))
+            print(('ERR. Reading the photometer!: %s' %str(msg)))
             if (DEBUG): raise
             return(-1)
         else:
-            print('Sensor info: '+str(msg)),
+            print(('Sensor info: '+str(msg)), end=' ')
             return(msg)
 
     def read_calibration(self,tries=1):
@@ -811,11 +808,11 @@ class SQMLU(SQM):
 
         # Check that msg contains data
         if read_err==True:
-            print('ERR. Reading the photometer!: %s' %str(msg))
+            print(('ERR. Reading the photometer!: %s' %str(msg)))
             if (DEBUG): raise
             return(-1)
         else:
-            print('Calibration info: '+str(msg)),
+            print(('Calibration info: '+str(msg)), end=' ')
             return(msg)
 
     def read_data(self,tries=1):
@@ -845,10 +842,10 @@ class SQMLU(SQM):
 
         # Check that msg contains data
         if read_err==True:
-            print('ERR. Reading the photometer!: %s' %str(msg))
+            print(('ERR. Reading the photometer!: %s' %str(msg)))
             if (DEBUG): raise
             return(-1)
         else:
-            if (DEBUG): print('Data msg: '+str(msg))
+            if (DEBUG): print(('Data msg: '+str(msg)))
             return(msg)
 

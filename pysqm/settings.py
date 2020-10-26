@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 PySQM plotting program
 ____________________________

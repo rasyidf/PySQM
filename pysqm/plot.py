@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 PySQM plotting program
 ____________________________
@@ -328,12 +326,11 @@ class SQMData(object):
     
         def window_smooth(x,window_len=10,window='hanning'):
             # http://scipy-cookbook.readthedocs.io/items/SignalSmooth.html
-            if x.ndim != 1: raise ValueError, "smooth requires 1-d arrays"
-            if x.size < window_len: raise ValueError, "size(input) < window_size"
+            if x.ndim != 1: raise ValueError("smooth requires 1-d arrays")
+            if x.size < window_len: raise ValueError("size(input) < window_size")
             if window_len < 3: return x
             if not window in ['flat','hanning','hamming','bartlett','blackman']:
-                raise ValueError, \
-                "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
+                raise ValueError("Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'")
             s=np.r_[x[window_len-1:0:-1],x,x[-2:-window_len-1:-1]]
             if window == 'flat': #moving average
                 w=np.ones(window_len,'d')
@@ -352,9 +349,9 @@ class SQMData(object):
             self.astronomical_night_temp = \
                  np.array(self.all_night_temp)[astronomical_night_filter]
         else:
-            print(\
+            print((\
              'Warning, < 10 points in astronomical night, '+\
-             ' using the whole night data instead')
+             ' using the whole night data instead'))
             self.astronomical_night_sb = self.all_night_sb
             self.astronomical_night_temp = self.all_night_temp
 
@@ -463,7 +460,7 @@ class Plot(object):
         '''
 
         # format the ticks (frente a alt sol)
-        tick_values = range(config.limits_sunalt[0],config.limits_sunalt[1]+5,5)
+        tick_values = list(range(config.limits_sunalt[0],config.limits_sunalt[1]+5,5))
         tick_marks  = np.multiply([deg for deg in tick_values],np.pi/180.0)
         tick_labels = [str(deg) for deg in tick_values]
 

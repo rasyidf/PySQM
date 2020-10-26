@@ -95,10 +95,10 @@ _send_to_datacenter = False
 '''
 Ploting options
 '''
-full_plot = False
-limits_nsb = [16.5,20.0] # Limits in Y-axis
-limits_time   = [17,9] # Hours
-limits_sunalt = [-80,5] # Degrees
+full_plot       = False
+limits_nsb      = [16.5, 20.0] # Limits in Y-axis
+limits_time     = [17, 9] # Hours
+limits_sunalt   = [-80, 5] # Degrees
 
 '''
 Email options

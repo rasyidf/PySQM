@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 PySQM common code
 ____________________________

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 PySQM __init__ code
 ____________________________

@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 '''
 PySQM main program
 ____________________________
@@ -45,6 +43,7 @@ config = settings.GlobalConfig.config
 ### Load now the rest of the modules
 from pysqm.read import *
 import pysqm.plot
+from time import sleep
 
 '''
 This import section is only for software build purposes.
@@ -73,7 +72,7 @@ if config._device_type == 'SQM-LE':
 elif config._device_type == 'SQM-LU':
     import serial
 if config._use_mysql == True:
-    import _mysql
+    import mysql
 
 
 # Create directories if needed
@@ -92,7 +91,7 @@ if config._device_type=='SQM-LU':
 elif config._device_type=='SQM-LE':
     mydevice = SQMLE()
 else:
-    print('ERROR. Unknown device type '+str(config._device_type))
+    print(('ERROR. Unknown device type '+str(config._device_type)))
     exit(0)
 
 
@@ -159,7 +158,7 @@ def loop():
                 try: pysqm.plot.make_plot(send_emails=False,write_stats=False)
                 except:
                     print('Warning: Error plotting data.')
-                    print(sys.exc_info())
+                    print((sys.exc_info()))
 
             if DaytimePrint==False:
                 DaytimePrint=True
@@ -171,8 +170,8 @@ def loop():
             ''' Daytime, print info '''
             if DaytimePrint==True:
                 utcdt = utcdt.strftime("%Y-%m-%d %H:%M:%S")
-                print (utcdt),
-                print('. Daytime. Waiting until '+str(mydevice.next_sunset(observ)))
+                print((utcdt), end=' ')
+                print(('. Daytime. Waiting until '+str(mydevice.next_sunset(observ))))
                 DaytimePrint=False
             if niter>0:
                 mydevice.flush_cache()
@@ -180,13 +179,13 @@ def loop():
                     try: pysqm.plot.make_plot(send_emails=True,write_stats=True)
                     except:
                         print('Warning: Error plotting data / sending email.')
-                        print(sys.exc_info())
+                        print((sys.exc_info()))
 
                 else:
                     try: pysqm.plot.make_plot(send_emails=False,write_stats=True)
                     except:
                         print('Warning: Error plotting data.')
-                        print(sys.exc_info())
+                        print((sys.exc_info()))
 
                 niter = 0
 
