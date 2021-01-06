@@ -1,112 +1,41 @@
-# -*- coding: utf-8 -*-
-'''
-PySQM reading program
-____________________________
+import os
 
-Copyright (c) Mireia Nievas <mnievas[at]ucm[dot]es>
+from .Common import *
 
-This file is part of PySQM.
+class observatory(object):
+    def read_datetime(self):
+        # Get UTC datetime from the computer.
+        utc_dt = datetime.datetime.utcnow()
+        #utc_dt = datetime.datetime.now() - datetime.timedelta(hours=config._computer_timezone)
+                #time.localtime(); daylight_saving=_.tm_isdst>0
+        return(utc_dt)
 
-PySQM is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    def local_datetime(self,utc_dt):
+        # Get Local datetime from the computer, without daylight saving.
+        return(utc_dt + datetime.timedelta(hours=config._local_timezone))
 
-PySQM is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+    def calculate_sun_altitude(self,OBS,timeutc):
+        # Calculate Sun altitude
+        OBS.date = ephem.date(timeutc)
+        Sun = ephem.Sun(OBS)
+        return(Sun.alt)
 
-You should have received a copy of the GNU General Public License
-along with PySQM.  If not, see <http://www.gnu.org/licenses/>.
-____________________________
-'''
+    def next_sunset(self,OBS):
+        # Next sunset calculation
+        previous_horizon = OBS.horizon
+        OBS.horizon = str(config._observatory_horizon)
+        next_setting = OBS.next_setting(ephem.Sun()).datetime()
+        next_setting = next_setting.strftime("%Y-%m-%d %H:%M:%S")
+        OBS.horizon = previous_horizon
+        return(next_setting)
 
-import os,sys
-import inspect
-import time
-import datetime
-import numpy as np
-import struct
-import socket
-
-# Default, to ignore the length of the read string.
-_cal_len_  = None
-_meta_len_ = None
-_data_len_ = None
-
-from pysqm.common import *
-
-'''
-This import section is only for software build purposes.
-Dont worry if some of these are missing in your setup.
-'''
-
-def relaxed_import(themodule):
-    try: exec('import '+str(themodule))
-    except: pass
-
-relaxed_import('serial')
-relaxed_import('_mysql')
-relaxed_import('pysqm.email')
-
-'''
-Read configuration
-'''
-import pysqm.settings as settings
-config = settings.GlobalConfig.config
-
-try:
-    DEBUG=config.DEBUG
-except:
-    DEBUG=False
-
-'''
-Conditional imports
-'''
-
-# If the old format (SQM_LE/SQM_LU) is used, replace _ with -
-config._device_type = config._device_type.replace('_','-')
-
-if config._device_type == 'SQM-LE':
-    import socket
-elif config._device_type == 'SQM-LU':
-    import serial
-if config._use_mysql == True:
-    import mysql
-
-
-def filtered_mean(array,sigma=3):
-    # Our data probably contains outliers, filter them
-    # Notes:
-    #   Median is more robust than mean
-    #    Std increases if the outliers are far away from real values.
-    #    We need to limit the amount of discrepancy we want in the data (20%?).
-
-    # We will use data masking and some operations with arrays. Convert to numpy.
-    array = np.array(array)
-
-    # Get the median and std.
-    data_median = np.median(array)
-    data_std    = np.std(array)
-
-    # Max discrepancy we allow.
-    fixed_max_dev  = 0.2*data_median
-    clip_deviation = np.min([fixed_max_dev,data_std*sigma+0.1])
-
-    # Create the filter (10% flux + variable factor)
-    filter_values_ok = np.abs(array-data_median)<=clip_deviation
-    filtered_values = array[filter_values_ok]
-
-    # Return the mean of filtered data or the median.
-    if np.size(filtered_values)==0:
-        print('Warning: High dispersion found on last measures')
-        filtered_mean = data_median
-    else:
-        filtered_mean = np.mean(filtered_values)
-
-    return(filtered_mean)
-
+    def is_nighttime(self,OBS):
+        # Is nightime (sun below a given altitude)
+        timeutc = self.read_datetime()
+        if self.calculate_sun_altitude(OBS,timeutc)*180./math.pi>config._observatory_horizon:
+            return False
+        else:
+            return True
 
 class device(observatory):
     def standard_file_header(self):
@@ -344,7 +273,6 @@ class device(observatory):
         if os.path.exists(self.current_datafile):
             os.remove(self.current_datafile)
 
-
 class SQM(device):
     def read_photometer(self,Nmeasures=1,PauseMeasures=2):
         # Initialize values
@@ -449,7 +377,6 @@ class SQM(device):
         time.sleep(0.1)
         #self.__init__()
         self.start_connection()
-
 
 class SQMLE(SQM):
     def __init__(self):
@@ -652,7 +579,6 @@ class SQMLE(SQM):
         else:
             if (DEBUG): print(('Data msg: '+str(msg)))
             return(msg)
-
 
 class SQMLU(SQM):
     def __init__(self):
