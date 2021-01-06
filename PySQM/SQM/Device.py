@@ -1,3 +1,5 @@
+from PySQM.SQM import Configuration
+import datetime
 import os
 
 from .Common import *
@@ -12,7 +14,7 @@ class observatory(object):
 
     def local_datetime(self,utc_dt):
         # Get Local datetime from the computer, without daylight saving.
-        return(utc_dt + datetime.timedelta(hours=config._local_timezone))
+        return(utc_dt + datetime.timedelta(hours=ConfigFile._local_timezone))
 
     def calculate_sun_altitude(self,OBS,timeutc):
         # Calculate Sun altitude

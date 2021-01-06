@@ -1,9 +1,9 @@
 
-""" Sky Quality Meter Client.
+"""Sky Quality Meter Client.
 
 Usage:
   pysqm.py init <observatory> [--config=<f>] 
-  pysqm.py serve [--config=<f>] [--input=<f>] 
+  pysqm.py serve --input=<f> [--config=<f>]
   pysqm.py plot 
   pysqm.py dashboard
   pysqm.py (-h | --help)
@@ -16,9 +16,11 @@ Options:
   -i --input=<f> Set Input file. 
 
 """
+
 from docopt import docopt
+ 
 
 
 if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Sky Quality Meter Client')
-    print(arguments)
+  arguments = docopt(__doc__, version='Sky Quality Meter Client')
+  print(arguments)

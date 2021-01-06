@@ -1,27 +1,10 @@
 
-
-'''
-Read configuration
-'''
-config = GlobalConfig.config
-
-
-
-'''
-This import section is only for software build purposes.
-Dont worry if some of these are missing in your setup.
-'''
-def relaxed_import(themodule):
-    try: exec('import '+str(themodule))
-    except: pass
-
-relaxed_import('serial')
-relaxed_import('_mysql')
-relaxed_import('pysqm.email')
+from PySQM.SQM import Config
+import numpy as np
 
 
 try:
-    DEBUG=config.DEBUG
+    DEBUG=Config.DEBUG
 except:
     DEBUG=False
 
